@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./Slices/userSlice";
-import productReducer from "./Slices/productSlice"; // Ensure path is correct
+import productReducer from "./Slices/productSlice"; 
 import itemReducer from "./Slices/itemSlice";
 import posReducer from "./Slices/posSlice";
 import orderReducer from "./Slices/orderSlice";
@@ -8,12 +8,12 @@ import orderReducer from "./Slices/orderSlice";
 
 const store = configureStore({
     reducer: {
-        users: userReducer,      // Account management ke liye
-        products: productReducer, // Items/Products management ke liye
+        users: userReducer,     
+        products: productReducer,
         items: itemReducer,
         pos: posReducer,
         orders: orderReducer,
-        
+
     }
 });
 

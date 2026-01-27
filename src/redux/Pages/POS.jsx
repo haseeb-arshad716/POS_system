@@ -11,8 +11,6 @@ import { clearUserCart } from '../Slices/posSlice';
 import { reduceStock } from '../Slices/itemSlice';
 
 
-
-
 const POS = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -47,9 +45,9 @@ const POS = () => {
     const handleAdd = (item) => {
 
         if (Number(item.stock) <= 0) {
-            setTimeout(()=>{
+            setTimeout(() => {
                 setOutofStock("");
-            },2000);            setOutofStock(true);
+            }, 2000); setOutofStock(true);
             return;
         }
 
@@ -75,17 +73,17 @@ const POS = () => {
         const userItems = cart.filter(item => item.userId === currentUser.id);
 
         if (userItems.length === 0) return alert("Cart is empty!");
-        if (userItems.some(item => item.quantity > item.stock )) {
-            setTimeout(()=>{
+        if (userItems.some(item => item.quantity > item.stock)) {
+            setTimeout(() => {
                 setError("");
-            },2000);
-             setError("You cannot order more than available stock!");
+            }, 2000);
+            setError("You cannot order more than available stock!");
             return;
         }
-        if (userItems.some(item => item.quantity === 0 )) {
-            setTimeout(()=>{
+        if (userItems.some(item => item.quantity === 0)) {
+            setTimeout(() => {
                 setError("");
-            },2000);
+            }, 2000);
             setError("Quantity cannot be zero!");
             return;
         }
@@ -159,7 +157,7 @@ const POS = () => {
                                         <button style={{ margin: '10px' }}
                                             className="add-to-cart-pos"
                                             onClick={() => handleAdd(item)}
-                                            
+
                                         >
                                             Add
                                         </button>
@@ -296,6 +294,8 @@ const POS = () => {
                 {
                     userCart.length > 0 && <Button text="Place Order" onClick={handleConfirm} disabled={confirmed} />
                 }
+                {/* print bill after confirmed */}
+                
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px', fontSize: '18px' }}>
                 {

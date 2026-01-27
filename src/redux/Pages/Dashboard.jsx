@@ -4,7 +4,8 @@ import { addItem, deleteItem } from '../Slices/itemSlice';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
-import {addStock} from '../Slices/itemSlice';
+import { addStock } from '../Slices/itemSlice';
+
 const Dashboard = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [error, setError] = useState("")
@@ -13,6 +14,8 @@ const Dashboard = () => {
   const [stock, setStock] = useState("");
   const [price, setPrice] = useState("");
   const [stockModalOpen, setstockModalOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState(null);
+
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -69,6 +72,22 @@ const Dashboard = () => {
     navigate('/POS');
   }
 
+  const openModal = (item) => {
+    setstockModalOpen(true);
+    setSelectedItemId(item.id);
+  };
+
+  const handleConfirmUpdate = (e) => {
+    e.preventDefault();
+
+    dispatch(addStock({
+      itemId: selectedItemId,
+      addedStock: Number(stock)
+    }));
+
+    setstockModalOpen(false);
+    setStock("");
+  };
 
   return (
     <div className='dashboard-content'>
@@ -124,6 +143,9 @@ const Dashboard = () => {
                     style={{ backgroundColor: 'red', color: 'white', marginRight: '10px' }}
                     onClick={() => handleDelete(item.id)}>
                     Delete</button>
+                    <button type='button' onClick={() => openModal(item)}>
+                      Add Stock
+                    </button>
                   </td>
 
                 </tr>
@@ -177,26 +199,30 @@ const Dashboard = () => {
           </div>
         </div>
       )}
-      {
-        stockModalOpen && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <h1>Update Stock</h1>
-              <form>
-                <label>New Stock Quantity</label>
-                <input
-                  type="text" placeholder='stock'
-                  value={stock} onChange={(e) => setStock(e.target.value)}
-                />
 
-                <div className="buttons">
-                  <button type='button' onClick={() => setstockModalOpen(false)}>Cancel</button>
-                  <button type='submit'>Update Stock</button>
-                </div>
-              </form>
-            </div>
+
+      {stockModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h1>Update Stock</h1>
+
+            <form onSubmit={handleConfirmUpdate}>
+              <label htmlFor="" style={{ marginBottom: '5px' }}>Add Quantity</label>
+              <input
+                placeholder='Enter quantity'
+                value={stock}
+                onChange={(e) => setStock(e.target.value)}
+                required
+              />
+
+              <div className="buttons">
+                <button type='button' onClick={() => setstockModalOpen(false)}>Cancel</button>
+                <button type='submit'>Update Stock</button>
+              </div>
+            </form>
           </div>
-        )}
+        </div>
+      )}
 
 
     </div>

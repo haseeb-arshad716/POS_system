@@ -18,6 +18,20 @@ const itemSlice = createSlice({
             localStorage.setItem("all_items",JSON.stringify(state.items));
 
         },
+
+addStock: (state,action)=>{
+const {itemId,addedStock} = action.payload;
+const product = state.items.find((item) => item.id === itemId);
+if(product){
+    const currentStock = Number(product.stock || 0);
+    product.stock = currentStock + Number(addedStock);
+
+}
+
+    localStorage.setItem("all_items", JSON.stringify(state.items));
+
+    },
+    
       reduceStock: (state, action) => {
     const orderedItems = action.payload; 
 
@@ -35,19 +49,6 @@ const itemSlice = createSlice({
 
     localStorage.setItem("all_items", JSON.stringify(state.items));
 },
-
-addStock: (state,action)=>{
-const {itemId,addedStock} = action.payload;
-const product = state.items.find((item) => item.id === itemId);
-if(product){
-    const currentStock = Number(product.stock || 0);
-    product.stock = currentStock + Number(addedStock);
-
-}
-
-    localStorage.setItem("all_items", JSON.stringify(state.items));
-
-    },
 }
 });
 
