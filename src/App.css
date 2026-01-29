@@ -646,11 +646,11 @@ button[type='button']:hover {
 
 .pos-search {
   position: relative;
-  width: 100%;
-  max-width: 500px;
-  margin: 20px auto;
+  max-width: 1100px;
+  margin: 20px auto; 
+  display: flex;
+  justify-content: center;
 }
-
 .pos-search-input {
   width: 100%;
   padding: 14px 45px 14px 16px;
@@ -666,7 +666,7 @@ button[type='button']:hover {
 }
 
 .pos-search-input:focus {
-  border-color: #2563eb;
+  
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
@@ -679,7 +679,8 @@ button[type='button']:hover {
   color: #6b7280;
   pointer-events: none;
 }
-/* Search result container */
+
+
 .search-results {
   margin-top: 12px;
   max-height: 260px;
@@ -688,7 +689,7 @@ button[type='button']:hover {
   border-radius: 8px;
 }
 
-/* POS table */
+
 .pos-table {
   width: 100%;
   border-collapse: collapse;
@@ -782,4 +783,151 @@ tbody tr td[colspan] {
   padding: 20px;
   color: #6b7280;
   font-style: italic;
+}
+.discount-input{
+  padding: 5px;
+  border: 1px solid #ccc;
+  background-color: #c5d1e9;
+  margin-top: 5px;
+  border-radius: 3px;
+}
+.bill-summary{
+  font-size: 18px;
+            font-weight: bold;
+
+            color: #202322;
+            display: flex ;
+            justify-content: space-between;
+            margin-top: 10px;
+            overflow: hidden;
+}
+.Place-order-btn{
+  background-color: #161616;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+}
+.pos-search-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 500px; /* Aap apni screen ke mutabiq set kar saktay hain */
+    display: flex;
+    align-items: center;
+}
+
+.pos-search-input {
+    width: 100%;
+    padding: 12px 45px 12px 15px; /* Right padding zyada rakhi hai icon ke liye */
+    font-size: 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #1e293b;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Hover aur Focus states */
+.pos-search-input:hover {
+    border-color: #cbd5e1;
+}
+
+.pos-search-input:focus {
+    border-color: #1c1d1f; /* Professional Blue color */
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    background-color: #fff;
+}
+
+/* Right side dropdown/search icon styling */
+.search-icon-right {
+    position: absolute;
+    right: 15px;
+    color: #94a3b8;
+    pointer-events: none; /* Taake icon par click karne se input focus na hatey */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Container jo search bar ke exact nichey khulega */
+.search-results-container {
+    position: absolute;
+    top: 100%; /* Search bar ke thik nichey */
+    left: 0;
+    width: 100%; /* Exact search bar jitni width */
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Har aik product row */
+.dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Hover effect */
+.dropdown-item:hover {
+    background-color: #f8fafc; /* Light gray background on hover */
+}
+
+/* Left side content (Title / Stock) */
+.item-info {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between title and stock */
+}
+
+.item-title {
+    font-weight: 700; /* Bold Title */
+    color: #1e293b;
+    font-size: 14px;
+}
+
+.item-divider {
+    color: #cbd5e1;
+    font-weight: 300;
+}
+
+.item-stock {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.low-stock {
+    color: #ef4444; /* Red color if stock < 10 */
+    font-weight: 600;
+}
+
+/* Right side price (optional but looks pro) */
+.item-price {
+    font-size: 13px;
+    font-weight: 600;
+    color: #3b82f6;
+}
+
+.no-results {
+    padding: 15px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 14px;
+}
+.search-item-row:hover{
+  background-color: #d7dedc;
 }

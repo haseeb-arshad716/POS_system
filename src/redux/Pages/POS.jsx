@@ -9,6 +9,7 @@ import { addToCart, deleteProduct, updateQuantity } from '../Slices/posSlice';
 import { confirmOrder } from '../Slices/orderSlice';
 import { clearUserCart } from '../Slices/posSlice';
 import { reduceStock } from '../Slices/itemSlice';
+import Header from '../components/Header';
 
 
 const POS = () => {
@@ -19,6 +20,10 @@ const POS = () => {
     const [confirmed, setConfirmed] = useState(false);
     const [outOfStock, setOutofStock] = useState("");
     const [error, setError] = useState("");
+    const [discount, setDiscount] = useState(0);
+    const [tax, setTax] = useState(0);
+
+
 
     const { items } = useSelector((state) => state.items);
     const { currentUser } = useSelector((state) => state.users);
@@ -40,14 +45,18 @@ const POS = () => {
     const userCart = cart.filter(
         (item) => item.userId === currentUser.id
     );
-
+    const handleLogout = () => {
+            dispatch(logoutUser()); 
+        
+    };
 
     const handleAdd = (item) => {
 
         if (Number(item.stock) <= 0) {
             setTimeout(() => {
                 setOutofStock("");
-            }, 2000); setOutofStock(true);
+            }, 2000);
+            setOutofStock(true);
             return;
         }
 
@@ -60,6 +69,15 @@ const POS = () => {
 
 
     };
+    
+
+    const totalItemsPrice = userCart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+    const discountValue = Number(discount) || 0;
+    const taxValue = Number(tax) || 0;
+
+    const finalBill = totalItemsPrice - discountValue + taxValue;
+
     const handleDelete = (item) => {
         dispatch(
             deleteProduct({
@@ -72,7 +90,7 @@ const POS = () => {
     const handleConfirm = () => {
         const userItems = cart.filter(item => item.userId === currentUser.id);
 
-        if (userItems.length === 0) return alert("Cart is empty!");
+        if (userItems.length === 0) return setError("Cart is empty!");
         if (userItems.some(item => item.quantity > item.stock)) {
             setTimeout(() => {
                 setError("");
@@ -87,12 +105,14 @@ const POS = () => {
             setError("Quantity cannot be zero!");
             return;
         }
-        const total = userItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         dispatch(reduceStock(userItems));
 
         dispatch(confirmOrder({
             items: userItems,
-            totalAmount: total
+            subtotal: totalItemsPrice,
+            tax: taxValue,
+            discount: discountValue,
+            totalAmount: finalBill,
         }));
 
         dispatch(clearUserCart({ userId: currentUser.id }));
@@ -106,105 +126,166 @@ const POS = () => {
 
     };
 
+
     return (
         <div>
+            <>
+            <Header  currentUser={currentUser} onLogout={handleLogout}
+            />
+           </>
+           <div className="btns" style={{display:'flex',justifyContent:'flex-end', marginTop:'10px'}}>
+            <Button 
+                text="Dashboard" 
+                onClick={() => navigate('/dashboard')} 
+            />
+            <Button 
+                text="Orders History" 
+                onClick={() => navigate('/orders-history')} 
+            />
+           </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-
-                <h1>My Store</h1>
-                <h2>Admin: {currentUser.name}</h2>
-                <div style={{ justifyContent: 'flex-end', display: 'flex', marginBottom: '10px' }}>
-                    <Button text="Logout" onClick={() => dispatch(logoutUser())} />
-                    <Button text="Back" onClick={() => navigate("/Dashboard")} />
-                    <Button text="Orders History" onClick={() => navigate("/orders-history")} />
-
-                </div>
-            </div>
-
-            <hr />
-
-            <div className="pos-search">
-                <SearchBar
+            <div className="pos-search" style={{ width: '100%', maxWidth: '1000px', margin: '20px auto' }}> 
+                <SearchBar 
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => setSearch(e.target.value)
+
+                    }
                 />
             </div>
 
-            {search && (
-                <table
-                    border="1"
-                    style={{ width: "100%", marginTop: "10px", borderCollapse: "collapse" }}
-                >
-                    <thead>
-                        <tr>
-                            <th style={{ padding: '10px' }}>ID</th>
-                            <th style={{ padding: '10px' }}>Product</th>
-                            <th style={{ padding: '10px' }}>Stock</th>
-                            <th style={{ padding: '10px' }}>Price</th>
-                            <th style={{ padding: '10px' }}>Action</th>
-                        </tr>
-                    </thead>
+           
+{search && (
+    <div className="search-results-wrapper" style={{
+        position: 'relative',
+        width: '100%', 
+        maxWidth: '600px', 
+        backgroundColor: '#fff',
+        boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+        borderRadius: '8px',
+        marginTop: '5px',
+        zIndex: 1000,
+        border: '1px solid #e5e7eb',
+        overflow: 'hidden',
+        margin:'0 auto'
+        
+    }}>
+        {filteredItems.length > 0 ? (
+            <div style={{ maxHeight: '350px', overflowY: 'auto' }}>
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: '2fr 1fr 1fr 1fr',
+                    padding: '10px 15px',
+                    backgroundColor: '#f8f9fa',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    color: '#6b7280',
+                    borderBottom: '1px solid #eee'
+                }}>
+                    <span>PRODUCT</span>
+                    <span style={{ textAlign: 'center' }}>STOCK</span>
+                    <span style={{ textAlign: 'center' }}>PRICE</span>
+                    <span style={{ textAlign: 'center' }}>ACTION</span>
+                </div>
 
-                    <tbody>
-                        {filteredItems.length > 0 ? (
-                            filteredItems.map((item) => (
-                                <tr key={item.id}>
-                                    <td style={{ padding: '10px' }}>{item.id}</td>
-                                    <td style={{ padding: '10px' }}>{item.title}</td>
-                                    <td style={{ padding: '10px' }}>{item.stock}</td>
-                                    <td style={{ padding: '10px' }}>${item.price}</td>
-                                    <td>
-                                        <button style={{ margin: '10px' }}
-                                            className="add-to-cart-pos"
-                                            onClick={() => handleAdd(item)}
+                {filteredItems.map((item) => (
+                    <div key={item.id} className="search-item-row" style={{
+                        display: 'grid',
+                        gridTemplateColumns: '2fr 1fr 1fr 1fr',
+                        padding: '12px 15px',
+                        alignItems: 'center',
+                        borderBottom: '1px solid #f3f4f6',
+                        transition: 'background 0.2s',
+                       
+                    }}>
+                        <div style={{ fontWeight: '600', fontSize: '14px', color: '#111827' }}>
+                            {item.title}
+                        </div>
+                        
+                        <div style={{ textAlign: 'center' }}>
+                            <span style={{
+                                color: item.stock < 10 ? '#ef4444' : '#10b981',
+                                fontWeight: 'bold',
+                                fontSize: '13px',
+                                backgroundColor: item.stock < 10 ? '#fee2e2' : '#dcfce7',
+                                padding: '2px 8px',
+                                borderRadius: '4px'
+                            }}>
+                                {item.stock}
+                            </span>
+                        </div>
 
-                                        >
-                                            Add
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
+                        <div style={{ textAlign: 'center', fontWeight: '700', color: '#374151' }}>
+                            Rs {item.price}
+                        </div>
+
+                        <div style={{ textAlign: 'center' }}>
+                            <button
+                                onClick={() => handleAdd(item)}
+                                style={{
+                                    padding: '6px 12px',
+                                    backgroundColor: '#3b82f6',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    fontSize: '12px',
+                                    fontWeight: '600',
+                                    boxShadow: '0 2px 4px rgba(59, 130, 246, 0.2)'
+                                }}
+                            >
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        ) : (
+            <div style={{ padding: '20px', textAlign: 'center', color: '#94a3b8', fontSize: '14px' }}>
+                🔍 No product found
+            </div>
+        )}
+    </div>
+)}
+           
+
+
+            <div style={{ marginTop: "30px", width: '80%', marginLeft: 'auto', marginRight: 'auto', padding: '10px', borderRadius: '8px' }}>
+                <h2 style={{color:'#2c323b'}}>No of items Added ( {<span >
+                    {
+                        userCart.reduce((sum, i) => sum + i.quantity, 0)
+                    } </span>})</h2>
+
+                {/* <div style={{ display: "flex", gap: "20px", marginTop: '20px', justifyContent: 'center' }}>
+
+                    <table
+                        border="1"
+                        style={{
+                            width: "100%", borderCollapse: "collapse",
+
+                            borderCollapse: "collapse",
+                            backgroundColor: "#fff",
+                            boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+                            borderRadius: "8px",
+                            overflow: "hidden"
+
+                        }}
+                    >
+                        <thead>
                             <tr>
-                                <td colSpan="5" style={{ textAlign: "center" }}>
-                                    No product found
-                                </td>
+                                <th style={{ padding: '10px' }}>Product</th>
+                                <th style={{ padding: '10px' }}>Price</th>
+                                <th style={{ padding: '10px' }}>Qty</th>
+
+                                <th style={{ padding: '10px' }}>Action</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
-            )}
+                        </thead>
 
-
-            {userCart.length > 0 && (
-                <div style={{ marginTop: "30px" }}>
-                    <h2 >Your Added Items</h2>
-
-                    <div style={{ display: "flex", gap: "20px", marginTop: '20px' }}>
-
-                        <table
-                            border="1"
-                            style={{ width: "100%", borderCollapse: "collapse" }}
-                        >
-                            <thead>
-                                <tr>
-                                    <th style={{ padding: '10px' }} >Product</th>
-                                    <th style={{ padding: '10px' }}>Price</th>
-                                    <th style={{ padding: '10px' }}>Qty</th>
-                                    <th style={{ padding: '10px' }}>Total items</th>
-                                    <th style={{ padding: '10px' }}>Total bill</th>
-                                    <th style={{ padding: '10px' }}>Action</th>
-
-
-
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                {userCart.length > 0 && userCart.map((item) => (
+                        <tbody>
+                            {userCart.length > 0 ? (
+                                userCart.map((item) => (
                                     <tr key={item.id}>
                                         <td style={{ padding: '10px' }}>{item.title}</td>
-                                        <td style={{ padding: '10px' }}>${item.price}</td>
+                                        <td style={{ padding: '10px' }}>Rs {item.price}</td>
                                         <td style={{ padding: '10px' }}>
                                             <input
                                                 type="number"
@@ -227,76 +308,295 @@ const POS = () => {
                                                 }
                                             />
                                         </td>
-
-                                        <td style={{ padding: '10px' }}>{item.quantity}</td>
-                                        <td style={{ padding: '10px' }}>${item.price * item.quantity}</td>
-                                        <td style={{ padding: '10px' }}><button type='button' onClick={() => { handleDelete(item) }}>Delete</button></td>
-
+                                        <td style={{ padding: '10px' }}>
+                                            <button type='button' onClick={() => { handleDelete(item) }}>Delete</button>
+                                        </td>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="6" style={{ padding: '20px', textAlign: 'center', color: '#888' }}>
+                                        No items added yet.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div> */}
 
+
+                <div style={{ marginTop: '20px', width: '100%' }}>
+    <div style={{
+        backgroundColor: "#fff",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+        borderRadius: "12px",
+        overflow: "hidden",
+        border: "1px solid #e5e7eb"
+    }}>
+        {/* Header Section */}
+        <div style={{
+            display: "grid",
+            gridTemplateColumns: "2fr 1fr 1.2fr 0.8fr",
+            backgroundColor: "#f9fafb",
+            padding: "15px 20px",
+            borderBottom: "2px solid #f3f4f6",
+            color: "#4b5563",
+            fontWeight: "bold",
+            fontSize: "13px",
+            letterSpacing: "0.5px"
+        }}>
+            <span>PRODUCT</span>
+            <span style={{ textAlign: "center" }}>PRICE</span>
+            <span style={{ textAlign: "center" }}>QUANTITY</span>
+            <span style={{ textAlign: "right" }}>ACTION</span>
+        </div>
+
+        {/* Body Section */}
+        <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+            {userCart.length > 0 ? (
+                userCart.map((item) => (
+                    <div key={item.id} style={{
+                        display: "grid",
+                        gridTemplateColumns: "2fr 1fr 1.2fr 0.8fr",
+                        padding: "15px 20px",
+                        alignItems: "center",
+                        borderBottom: "1px solid #f3f4f6",
+                        transition: "background 0.2s"
+                    }} className="cart-row-hover">
+                        
+                        <span style={{ fontWeight: "600", color: "#111827", fontSize: "15px" }}>
+                            {item.title}
+                        </span>
+
+                        <span style={{ textAlign: "center", fontWeight: "500", color: "#374151" }}>
+                            Rs {item.price}
+                        </span>
+
+                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                            <div style={{
+                                display: "flex",
+                                alignItems: "center",
+                                background: "#f3f4f6",
+                                borderRadius: "8px",
+                                padding: "5px"
+                            }}>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={item.quantity}
+                                    disabled={confirmed}
+                                    onChange={(e) =>
+                                        dispatch(updateQuantity({
+                                            userId: currentUser.id,
+                                            itemId: item.id,
+                                            quantity: Number(e.target.value)
+                                        }))
+                                    }
+                                    style={{
+                                        width: "50px",
+                                        border: "none",
+                                        background: "transparent",
+                                        textAlign: "center",
+                                        fontWeight: "bold",
+                                        outline: "none",
+                                        fontSize: "14px"
+                                    }}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Delete Action */}
+                        <div style={{ textAlign: "right" }}>
+                            <button 
+                                type='button' 
+                                onClick={() => handleDelete(item)}
+                                style={{
+                                    backgroundColor: "#fee2e2",
+                                    color: "#ef4444",
+                                    border: "none",
+                                    padding: "8px 12px",
+                                    borderRadius: "8px",
+                                    cursor: "pointer",
+                                    fontSize: "12px",
+                                    fontWeight: "600",
+                                    transition: "0.2s"
+                                }}
+                            >
+                                ✕ Remove
+                            </button>
+                        </div>
                     </div>
+                ))
+            ) : (
+                <div style={{ padding: '40px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '40px', marginBottom: '10px' }}>🛒</div>
+                    <p style={{ color: '#9ca3af', fontWeight: '500' }}>No Items Added yet</p>
                 </div>
             )}
+        </div>
+    </div>
+</div>
+            </div>
 
-            {userCart.length > 0 && (
+
+
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "20px",
+                    marginRight: "10%",
+                }}
+            >
                 <div
                     style={{
+                        background: "#f9fafb",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: "10px",
+                        padding: "16px",
+                        boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
+                        width: "25%",
+
+                        minHeight: "150px",
                         display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: "20px"
+                        flexDirection: "column",
+                        justifyContent: "center"
                     }}
                 >
-                    <div
+                    <h3
                         style={{
-                            background: "#f9fafb",
-                            border: "1px solid #e5e7eb",
-                            borderRadius: "8px",
-                            padding: "16px",
-                            boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
-                            width: "20%"
+                            marginBottom: "12px",
+                            borderBottom: "1px solid #e5e7eb",
+                            paddingBottom: "8px",
+                            textAlign: userCart.length === 0 ? "center" : "left"
                         }}
                     >
-                        <h3
-                            style={{
-                                marginBottom: "12px",
-                                borderBottom: "1px solid #e5e7eb",
-                                paddingBottom: "8px"
-                            }}
-                        >
-                            Bill Summary
-                        </h3>
+                        Bill Summary
+                    </h3>
 
-                        <p>
-                            <strong>Total Items:</strong>{" "}
-                            {userCart.reduce((sum, i) => sum + i.quantity, 0)}
-                        </p>
+                    {userCart.length > 0 ? (
+                        <>
 
-                        <p
-                            style={{
-                                fontSize: "18px",
-                                fontWeight: "bold",
-                                color: "#047857"
-                            }}
-                        >
-                            Total: $
-                            {userCart.reduce(
-                                (sum, i) => sum + i.price * i.quantity,
-                                0
-                            )}
-                        </p>
-                    </div>
+                            <p
+                                className='bill-summary'
+                            >
+                                <span> Sub Total:</span>
+                                <span>Rs {totalItemsPrice.toFixed(2)}</span>
+
+                            </p>
+                            <p className='bill-summary'>
+                                <span>Discount: </span>
+                                <span style={{ float: 'right', }}> <input type="number" className='discount-input'
+                                    min={0} value={discount}
+                                    style={{ fontSize: '12px', fontWeight: 'bold', padding: '8px' }}
+                                    onChange={(e) => {
+                                        setDiscount(e.target.value);
+
+                                    }}
+                                />
+
+
+                                </span>
+
+                            </p>
+                            <p className='bill-summary'>
+                                <span>Tax: </span>
+                                <span style={{ float: 'right' }}><input type='number' className='discount-input' min={0}
+                                    name='tax'
+                                    value={tax}
+                                    style={{ fontSize: '12px', fontWeight: 'bold', padding: '8px' }}
+                                    onChange={(e) => setTax(e.target.value)
+                                    }
+                                /></span>
+                            </p>
+                            <p className='bill-summary'>
+                                Grand Total:
+                                <span style={{ float: 'right' }}>
+                                    {
+                                        finalBill.toFixed(2)
+                                    }
+
+                                </span>
+                            </p>
+
+
+                            <div className="confirm-order" style={{ marginTop: '10px', width: '100%' }}>
+                                <button onClick={handleConfirm} disabled={confirmed} className='Place-order-btn'>
+                                    Place Order
+                                </button>
+
+
+                            </div>
+
+                        </>
+                    ) : (
+
+                        <div style={{ textAlign: "center", color: "#141414", padding: "10px " }}>
+                           <>
+
+                            <p
+                                className='bill-summary'
+                            >
+                                <span> Sub Total:</span>
+                                <span>0</span>
+
+                            </p>
+                            <p className='bill-summary'>
+                                <span>Discount: </span>
+                                <span style={{ float: 'right', }}> <input type="number" className='discount-input'
+                                    min={0} value={discount}
+                                    disabled
+                                    style={{ fontSize: '12px', fontWeight: 'bold', padding: '8px' }}
+                                    onChange={(e) => {
+                                        setDiscount(e.target.value);
+
+                                    }}
+                                />
+
+
+                                </span>
+
+                            </p>
+                            <p className='bill-summary'>
+                                <span>Tax: </span>
+                                <span style={{ float: 'right' }}><input type='number' className='discount-input' min={0}
+                                    name='tax'
+                                    value={tax}
+                                    disabled
+                                    style={{ fontSize: '12px', fontWeight: 'bold', padding: '8px' }}
+                                    onChange={(e) => setTax(e.target.value)
+                                    
+                                    }
+                                /></span>
+                            </p>
+                            <p className='bill-summary'>
+                                Grand Total:
+                                <span style={{ float: 'right' }}>
+                                    0
+
+                                </span>
+                            </p>
+
+
+                            <div className="confirm-order" style={{ marginTop: '10px', width: '100%' }}>
+                                <button onClick={handleConfirm}
+                                
+                                 disabled
+                               
+                                className='Place-order-btn'>
+                                    Place Order
+                                </button>
+
+
+                            </div>
+
+                        </>
+                        </div>
+                    )
+}
                 </div>
-            )}
-            <div className="confirm-order" style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
-                {
-                    userCart.length > 0 && <Button text="Place Order" onClick={handleConfirm} disabled={confirmed} />
-                }
-                {/* print bill after confirmed */}
-                
             </div>
+
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px', fontSize: '18px' }}>
                 {
                     confirmed && <p style={{ color: 'green', fontWeight: 'bold', marginTop: '10px' }}>{confirmed}</p>
@@ -307,8 +607,8 @@ const POS = () => {
                 {
                     error && <p style={{ color: 'red', fontWeight: 'bold', marginTop: '10px' }}>{error}</p>
                 }
-            </div>
 
+            </div>
         </div>
     );
 };

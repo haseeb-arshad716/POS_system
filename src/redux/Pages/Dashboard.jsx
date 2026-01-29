@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
 import { addStock } from '../Slices/itemSlice';
+import Header from '../components/Header';
+import { logoutUser } from '../Slices/userSlice';
+import StatCard from '../components/StatCard';
 
 const Dashboard = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -57,8 +60,6 @@ const Dashboard = () => {
     setModalOpen(false);
   };
 
-
-
   const handleLogOut = () => {
 
     navigate('/');
@@ -71,7 +72,10 @@ const Dashboard = () => {
   const goToPos = () => {
     navigate('/POS');
   }
-
+const handleLogout = () => {
+            dispatch(logoutUser()); 
+        
+    };
   const openModal = (item) => {
     setstockModalOpen(true);
     setSelectedItemId(item.id);
@@ -91,75 +95,136 @@ const Dashboard = () => {
 
   return (
     <div className='dashboard-content'>
-      <h1 className='dashboard-header'>Welcome to {currentUser?.name.toUpperCase()}</h1>
 
-      <div className="btns" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <Header currentUser={currentUser} onLogout={handleLogOut}/>
+      <div className="btns" style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
         <Button onClick={() => setModalOpen(true)} text="Add Item" />
 
-        <Button onClick={handleLogOut} text="Logout" />
-
-        <Button text="POS" onClick={goToPos} />
+        <Button text="POS" onClick={goToPos}  />
       </div>
 
-      <div className="summary">
-        <span>Total Items
-          <p style={{ marginTop: '20px' }}> {myItems.length}</p>
-        </span>
-        <span>
-          Total Stock
-          <p style={{ marginTop: '20px' }}> {
-            myItems.reduce((sum, i) => sum + Number(i.stock), 0)
-          }</p>
-        </span>
-      </div>
+    <div className="state-card" style={{display:'flex',gap:'10px',marginTop:'10px'}} >
+ <StatCard label="Products" 
+                value={myItems.length} 
+                icon="📦" 
+                bgColor="#eff6ff"/>
+ <StatCard label="Total Stock Items" 
+              value={myItems.reduce((sum, item) => sum + item.stock, 0)}
+                icon="✅" 
+                bgColor="#eff6ff"/>
 
-      <div className="dashboard-table-container">
-        <h2 style={{ marginTop: '20px' }}>Your Added Items</h2>
+    </div>
 
+      <div style={{ marginTop: '20px', width: '100%' }}>
+        <div style={{
+          backgroundColor: "#fff",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
+          borderRadius: "12px",
+          overflow: "hidden",
+          border: "1px solid #e5e7eb"
+        }}>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1.5fr 1fr 1fr 2fr 1.5fr", 
+            backgroundColor: "#f8fafc",
+            padding: "15px 20px",
+            borderBottom: "2px solid #f1f5f9",
+            color: "#64748b",
+            fontWeight: "700",
+            fontSize: "12px",
+            letterSpacing: "0.5px"
+          }}>
+            <span>PRODUCT TITLE</span>
+            <span>PRICE</span>
+            <span>STOCK</span>
+            <span>DESCRIPTION</span>
+            <span style={{ textAlign: "right" }}>ACTIONS</span>
+          </div>
 
-
-        <table border="1" style={{ width: '100%', marginTop: '10px', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ backgroundColor: '#e4d0d0ff', textAlign: 'left', color: 'black' }}>
-
-              <th style={{ padding: '10px' }}>Title</th>
-              <th style={{ padding: '10px' }}>Price</th>
-              <th style={{ padding: '10px' }}>Stock</th>
-              <th style={{ padding: '10px' }}>Description</th>
-              <th style={{ padding: '10px' }}>Action</th>
-
-            </tr>
-          </thead>
-
-          <tbody>
+          
+          <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
             {myItems.length > 0 ? (
               myItems.map((item) => (
-                <tr key={item.id || item.title + Date.now()}>
-                  <td style={{ padding: '10px' }}>{item.title}</td>
-                  <td style={{ padding: '10px' }}>${item.price}</td>
-                  <td style={{ padding: '10px' }}>{item.stock}</td>
-                  <td style={{ padding: '10px' }}>{item.description}</td>
-                  <td style={{ padding: '10px' }}><button type='button'
-                    style={{ backgroundColor: 'red', color: 'white', marginRight: '10px' }}
-                    onClick={() => handleDelete(item.id)}>
-                    Delete</button>
-                    <button type='button' onClick={() => openModal(item)}>
+                <div key={item.id || item.title} style={{
+                  display: "grid",
+                  gridTemplateColumns: "1.5fr 1fr 1fr 2fr 1.5fr",
+                  padding: "16px 20px",
+                  alignItems: "center",
+                  borderBottom: "1px solid #f1f5f9",
+                  transition: "background 0.2s"
+                }} className="inventory-row">
+                    <span style={{ fontWeight: "600", color: "#1e293b" }}>{item.title}</span>
+                  <span style={{ fontWeight: "500", color: "#334155" }}>Rs {item.price}</span>
+
+                  <div>
+                    <span style={{
+                      padding: "4px 10px",
+                      borderRadius: "6px",
+                      fontSize: "12px",
+                      fontWeight: "700",
+                      backgroundColor: item.stock < 10 ? "#fee2e2" : "#dcfce7",
+                      color: item.stock < 10 ? "#ef4444" : "#10b981"
+                    }}>
+                      {item.stock} in stock
+                    </span>
+                  </div>
+
+                  <span style={{
+                    fontSize: "14px",
+                    color: "#48505b",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    paddingRight: "10px"
+                  }}>
+                    {item.description || "No description"}
+                  </span>
+
+                  <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+                    <button
+                      onClick={() => openModal(item)}
+                      style={{
+                        backgroundColor: "#eff6ff",
+                        color: "#3b82f6",
+                        border: "none",
+                        padding: "8px 12px",
+                        borderRadius: "8px",
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        cursor: "pointer"
+                      }}
+                    >
                       Add Stock
                     </button>
-                  </td>
-
-                </tr>
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      style={{
+                        backgroundColor: "#fff1f2",
+                        color: "#e11d48",
+                        border: "none",
+                        padding: "8px 12px",
+                        borderRadius: "8px",
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        cursor: "pointer"
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
               ))
             ) : (
-              <tr>
-                <td colSpan="5" style={{ textAlign: 'center', padding: '20px' }}>
-                  No items found. Click "Add to item" to create one.
-                </td>
-              </tr>
+              <div style={{ padding: '50px', textAlign: 'center', color: '#94a3b8' }}>
+                <div style={{ fontSize: '30px' }}>📦</div>
+                <p>No items found. Click "Add to item" to create one.</p>
+              </div>
             )}
-          </tbody>
-        </table>
+          </div>
+        </div>
       </div>
+
+
       {modalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -217,7 +282,7 @@ const Dashboard = () => {
 
               <div className="buttons">
                 <button type='button' onClick={() => setstockModalOpen(false)}>Cancel</button>
-                <button type='submit'>Update Stock</button>
+                <button type='submit' style={{ backgroundColor: '#3b82f6' }}>Update Stock</button>
               </div>
             </form>
           </div>

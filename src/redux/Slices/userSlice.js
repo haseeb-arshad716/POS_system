@@ -15,6 +15,11 @@ const userSlice = createSlice({
     reducers: {
        registeredUser: (state, action) => {
     const exists = state.users.find(u => u.email === action.payload.email);
+    const emailValidation = /\S+@\S+\.\S+/;
+    if (!emailValidation.test(action.payload.email)) {
+        state.error = "Invalid email format!";
+        return;
+    }
 
     if (!exists) {
         const lastUser = state.users[state.users.length - 1];
