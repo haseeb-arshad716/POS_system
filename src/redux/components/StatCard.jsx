@@ -15,7 +15,7 @@ const StatCard = ({ label, value, icon, color, bgColor }) => {
             alignItems: 'center',
             gap: '15px',
             transition: 'transform 0.2s ease'
-        }}>
+        }} className='stat-card' >
            
             <div style={{
                 backgroundColor: bgColor, 

@@ -595,12 +595,13 @@ form input:focus {
 
 /* Save Button */
 button[type='submit'] {
-  background-color: rgba(12, 37, 220, 0.94);
+  background-color: #2b2d3a;
   color: white;
 }
 
 button[type='submit']:hover {
-  background-color: #0a1da8;
+  background-color: #2b2d3a;
+  color: white;
 }
 
 /* Cancel Button */
@@ -689,105 +690,10 @@ button[type='button']:hover {
   border-radius: 8px;
 }
 
-
-.pos-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-/* Table header */
-.pos-table thead {
-  background-color: #f9fafb;
-}
-
-.pos-table th {
-  text-align: left;
-  padding: 10px;
-  font-weight: 600;
-  color: #374151;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-/* Table rows */
-.pos-table td {
-  padding: 10px;
-  border-bottom: 1px solid #f1f5f9;
-  color: #111827;
-}
-
-/* Clickable row (Add to cart) */
-.pos-table tbody tr {
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-/* Hover effect */
-.pos-table tbody tr:hover {
-  background-color: #eef2ff;
-}
-.add-to-cart-pos{
-  background-color: #2563eb !important;
-  color: white !important ;
-  width: 100px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: #ffffff;
-  font-family: Arial, sans-serif;
-}
-
-thead tr {
-  background-color: #1f2937; /* dark header */
-  color: #ffffff;
-}
-
-th, td {
-  padding: 12px 14px;
-  text-align: left;
-  border: 1px solid #e5e7eb;
-}
-
-tbody tr:nth-child(even) {
-  background-color: #f9fafb;
-}
-
-tbody tr:hover {
-  background-color: #eef2ff;
-  transition: background-color 0.2s ease;
-}
-
-th {
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-td {
-  font-size: 15px;
-  color: #111827;
-}
-
-/* Price & Total highlight */
-td:nth-child(2),
-td:nth-child(4) {
-  font-weight: bold;
-  color: #047857;
-}
-
-/* Empty row message */
-tbody tr td[colspan] {
-  text-align: center;
-  padding: 20px;
-  color: #6b7280;
-  font-style: italic;
-}
 .discount-input{
   padding: 5px;
   border: 1px solid #ccc;
-  background-color: #c5d1e9;
+  background-color:#e2e9f0;
   margin-top: 5px;
   border-radius: 3px;
 }
@@ -855,7 +761,6 @@ tbody tr td[colspan] {
     justify-content: center;
 }
 
-/* Container jo search bar ke exact nichey khulega */
 .search-results-container {
     position: absolute;
     top: 100%; /* Search bar ke thik nichey */
@@ -871,7 +776,6 @@ tbody tr td[colspan] {
     z-index: 1000;
 }
 
-/* Har aik product row */
 .dropdown-item {
     display: flex;
     justify-content: space-between;
@@ -882,20 +786,18 @@ tbody tr td[colspan] {
     border-bottom: 1px solid #f1f5f9;
 }
 
-/* Hover effect */
 .dropdown-item:hover {
     background-color: #f8fafc; /* Light gray background on hover */
 }
 
-/* Left side content (Title / Stock) */
 .item-info {
     display: flex;
     align-items: center;
-    gap: 8px; /* Space between title and stock */
+    gap: 8px;
 }
 
 .item-title {
-    font-weight: 700; /* Bold Title */
+    font-weight: 700; 
     color: #1e293b;
     font-size: 14px;
 }
@@ -911,11 +813,10 @@ tbody tr td[colspan] {
 }
 
 .low-stock {
-    color: #ef4444; /* Red color if stock < 10 */
+    color: #ef4444; 
     font-weight: 600;
 }
 
-/* Right side price (optional but looks pro) */
 .item-price {
     font-size: 13px;
     font-weight: 600;
@@ -930,4 +831,20 @@ tbody tr td[colspan] {
 }
 .search-item-row:hover{
   background-color: #d7dedc;
+}
+.stat-card{
+ border: 1px solid #64748b !important;
+}
+.login-input{
+  
+  background-color: #d7dedc;
+}
+.login-icon{
+  width: 50px;
+ 
+}
+.icon{
+  display: flex;
+  justify-content: center;
+  
 }

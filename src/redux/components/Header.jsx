@@ -15,14 +15,14 @@ const Header = ({ currentUser, onLogout }) => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 
                 <h1 style={{
-                    fontSize: '22px',
-                    fontWeight: '800',
+                    fontSize: '25px',
+                    fontWeight: '600',
                     color: '#1e293b',
                     fontFamily: "'Inter', sans-serif",
                     margin: 0,
                     letterSpacing: '-0.5px'
                 }}>
-                    My <span style={{ color: '#3b82f6' }}>Store</span>
+                    Nexus  <span style={{ color: '#3b82f6' }}>Retail</span>
                 </h1>
             </div>
 

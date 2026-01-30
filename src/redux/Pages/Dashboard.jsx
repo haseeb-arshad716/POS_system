@@ -160,7 +160,7 @@ const handleLogout = () => {
                     <span style={{
                       padding: "4px 10px",
                       borderRadius: "6px",
-                      fontSize: "12px",
+                      fontSize: "14px",
                       fontWeight: "700",
                       backgroundColor: item.stock < 10 ? "#fee2e2" : "#dcfce7",
                       color: item.stock < 10 ? "#ef4444" : "#10b981"
@@ -170,7 +170,7 @@ const handleLogout = () => {
                   </div>
 
                   <span style={{
-                    fontSize: "14px",
+                    fontSize: "15px",
                     color: "#48505b",
                     whiteSpace: "nowrap",
                     overflow: "hidden",

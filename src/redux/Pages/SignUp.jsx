@@ -47,15 +47,15 @@ const SignUp = () => {
     return (
         <div className="sign-up-container">
             <form className='sign-up-form' onSubmit={handleSubmit}>
-                <h2 style={{ textAlign: 'center', color: 'blue' }}>Sign up</h2>
+                <h2 style={{ textAlign: 'center', color: '#606664' }}>Sign up</h2>
                 <label>Name</label>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder='Enter your Name' />
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder='Enter your Name' className='login-input' />
 
                 <label>Email</label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Enter your Email' />
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Enter your Email'className='login-input' />
 
                 <label>Password</label>
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Enter your Password' />
+                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Enter your Password' className='login-input' />
 
                 {(localError || reduxError) && (
                     <p style={{ color: 'red', fontWeight: 'bold', textAlign: 'center' }}>
@@ -64,7 +64,7 @@ const SignUp = () => {
                 )}
 
                 <button type="submit">SignUp</button>
-                <p>Already have an account? <Link to='/' style={{ color: 'blue', fontSize: '15px' }}>Login</Link></p>
+                <p>Already have an account? <Link to='/' style={{ color: 'blue', fontSize: '15px',color:'#64656b',fontWeight:'500',textDecoration:'none' }}>Login</Link></p>
             </form>
             {success && !reduxError && <h2 style={{ color: 'green' }}>✅ Sign up Successfully!</h2>}
         </div>

@@ -152,7 +152,11 @@ const POS = () => {
                     }
                 />
             </div>
-
+<div className="" style={{}}>
+       {
+                    confirmed && <p style={{ color: 'green', fontWeight: 'bold', marginTop: '10px' }}>{confirmed}</p>
+                }
+</div>
            
 {search && (
     <div className="search-results-wrapper" style={{
@@ -169,6 +173,7 @@ const POS = () => {
         margin:'0 auto'
         
     }}>
+    
         {filteredItems.length > 0 ? (
             <div style={{ maxHeight: '350px', overflowY: 'auto' }}>
                 <div style={{
@@ -255,77 +260,7 @@ const POS = () => {
                         userCart.reduce((sum, i) => sum + i.quantity, 0)
                     } </span>})</h2>
 
-                {/* <div style={{ display: "flex", gap: "20px", marginTop: '20px', justifyContent: 'center' }}>
-
-                    <table
-                        border="1"
-                        style={{
-                            width: "100%", borderCollapse: "collapse",
-
-                            borderCollapse: "collapse",
-                            backgroundColor: "#fff",
-                            boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-                            borderRadius: "8px",
-                            overflow: "hidden"
-
-                        }}
-                    >
-                        <thead>
-                            <tr>
-                                <th style={{ padding: '10px' }}>Product</th>
-                                <th style={{ padding: '10px' }}>Price</th>
-                                <th style={{ padding: '10px' }}>Qty</th>
-
-                                <th style={{ padding: '10px' }}>Action</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {userCart.length > 0 ? (
-                                userCart.map((item) => (
-                                    <tr key={item.id}>
-                                        <td style={{ padding: '10px' }}>{item.title}</td>
-                                        <td style={{ padding: '10px' }}>Rs {item.price}</td>
-                                        <td style={{ padding: '10px' }}>
-                                            <input
-                                                type="number"
-                                                min="1"
-                                                value={item.quantity}
-                                                disabled={confirmed}
-                                                style={{
-                                                    width: "60px",
-                                                    padding: "5px",
-                                                    textAlign: "center"
-                                                }}
-                                                onChange={(e) =>
-                                                    dispatch(
-                                                        updateQuantity({
-                                                            userId: currentUser.id,
-                                                            itemId: item.id,
-                                                            quantity: Number(e.target.value)
-                                                        })
-                                                    )
-                                                }
-                                            />
-                                        </td>
-                                        <td style={{ padding: '10px' }}>
-                                            <button type='button' onClick={() => { handleDelete(item) }}>Delete</button>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="6" style={{ padding: '20px', textAlign: 'center', color: '#888' }}>
-                                        No items added yet.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div> */}
-
-
-                <div style={{ marginTop: '20px', width: '100%' }}>
+            <div style={{ marginTop: '20px', width: '100%' }}>
     <div style={{
         backgroundColor: "#fff",
         boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
@@ -333,11 +268,11 @@ const POS = () => {
         overflow: "hidden",
         border: "1px solid #e5e7eb"
     }}>
-        {/* Header Section */}
+        
         <div style={{
             display: "grid",
             gridTemplateColumns: "2fr 1fr 1.2fr 0.8fr",
-            backgroundColor: "#f9fafb",
+            backgroundColor: "#e2e9f0",
             padding: "15px 20px",
             borderBottom: "2px solid #f3f4f6",
             color: "#4b5563",
@@ -399,7 +334,8 @@ const POS = () => {
                                         textAlign: "center",
                                         fontWeight: "bold",
                                         outline: "none",
-                                        fontSize: "14px"
+                                        fontSize: "14px",
+                                       
                                     }}
                                 />
                             </div>
