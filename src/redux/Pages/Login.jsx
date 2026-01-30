@@ -37,7 +37,7 @@ const Login = () => {
 
       <form className="login-form" onSubmit={handleSubmit}>
         <div className="icon" >
-        <img src="https://tse4.mm.bing.net/th/id/OIP.l54ICAiwopa2RCt7J2URWwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="" className='login-icon'  />
+        <img src="https://tse4.mm.bing.net/th/id/OIP.l54ICAiwopa2RCt7J2URWwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="" className='login-icon'/>
        </div>
         <h2 style={{ color: '#606664' }}>User Login</h2>
         <label>Email</label>

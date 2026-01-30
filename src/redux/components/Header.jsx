@@ -22,7 +22,7 @@ const Header = ({ currentUser, onLogout }) => {
                     margin: 0,
                     letterSpacing: '-0.5px'
                 }}>
-                    Nexus  <span style={{ color: '#3b82f6' }}>Retail</span>
+                    Nexus  <span style={{ color: '#72767d' }}>Retail</span>
                 </h1>
             </div>
 

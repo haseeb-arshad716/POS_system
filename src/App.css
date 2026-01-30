@@ -16,9 +16,7 @@ header {
   background-color: #ffffff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+
 }
 
 /* Logo styling */
@@ -649,6 +647,7 @@ button[type='button']:hover {
   position: relative;
   max-width: 1100px;
   margin: 20px auto; 
+
   display: flex;
   justify-content: center;
 }
@@ -721,14 +720,14 @@ button[type='button']:hover {
 .pos-search-wrapper {
     position: relative;
     width: 100%;
-    max-width: 500px; /* Aap apni screen ke mutabiq set kar saktay hain */
+    max-width: 600px;
     display: flex;
     align-items: center;
 }
 
 .pos-search-input {
     width: 100%;
-    padding: 12px 45px 12px 15px; /* Right padding zyada rakhi hai icon ke liye */
+    padding: 12px 45px 12px 15px; 
     font-size: 16px;
     border: 2px solid #e2e8f0;
     border-radius: 8px;
@@ -750,12 +749,11 @@ button[type='button']:hover {
     background-color: #fff;
 }
 
-/* Right side dropdown/search icon styling */
 .search-icon-right {
     position: absolute;
     right: 15px;
     color: #94a3b8;
-    pointer-events: none; /* Taake icon par click karne se input focus na hatey */
+    pointer-events: none; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -763,9 +761,9 @@ button[type='button']:hover {
 
 .search-results-container {
     position: absolute;
-    top: 100%; /* Search bar ke thik nichey */
+    top: 100%; 
     left: 0;
-    width: 100%; /* Exact search bar jitni width */
+    width: 100%; 
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
     border-top: none;
