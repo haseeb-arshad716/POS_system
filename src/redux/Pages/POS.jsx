@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState,useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../components/Button';
 import { logoutUser } from '../Slices/userSlice';
@@ -22,6 +22,8 @@ const POS = () => {
     const [error, setError] = useState("");
     const [discount, setDiscount] = useState(0);
     const [tax, setTax] = useState(0);
+    const searchRef = useRef(null);
+    const [selectedIndex, setSelectedIndex] = useState(-1);
 
 
 
@@ -50,25 +52,25 @@ const POS = () => {
 
     };
 
-    const handleAdd = (item) => {
+    // const handleAdd = (item) => {
 
-        if (Number(item.stock) <= 0) {
-            setTimeout(() => {
-                setOutofStock("");
-            }, 1000);
-            setOutofStock(true);
-            return;
-        }
+    //     if (Number(item.stock) <= 0) {
+    //         setTimeout(() => {
+    //             setOutofStock("");
+    //         }, 1000);
+    //         setOutofStock(true);
+    //         return;
+    //     }
 
-        dispatch(
-            addToCart({
-                userId: currentUser.id,
-                item
-            })
-        );
+    //     dispatch(
+    //         addToCart({
+    //             userId: currentUser.id,
+    //             item
+    //         })
+    //     );
 
 
-    };
+    // };
 
 
     const totalItemsPrice = userCart.reduce((sum, i) => sum + i.price * i.quantity, 0);
@@ -117,15 +119,52 @@ const POS = () => {
 
         dispatch(clearUserCart({ userId: currentUser.id }));
 
-
+setSearch(""); 
         setTimeout(() => {
             setConfirmed(false);
         }, 1000);
 
         setConfirmed("✅ Order placed successfully!");
+        
 
     };
+    const clearItems = ()=>{
+        dispatch(clearUserCart({userId:currentUser.id}));
+    }
+    const handleKeyDown = (e) => {
+    if (filteredItems.length === 0) return;
 
+    if (e.key === 'ArrowDown') {
+        e.preventDefault(); 
+        setSelectedIndex(prev => (prev < filteredItems.length - 1 ? prev + 1 : prev));
+    } 
+    else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSelectedIndex(prev => (prev > 0 ? prev - 1 : prev));
+    } 
+    
+    else if (e.key === 'Enter') {
+        if (selectedIndex >= 0) {
+            const selectedProduct = filteredItems[selectedIndex];
+           
+            dispatch(
+                addToCart({
+                    userId: currentUser.id,
+                    item: selectedProduct
+                })
+            );
+        
+            setSearch(""); 
+            setSelectedIndex(-1);         }
+    }
+};
+    useEffect(() => {
+        searchRef.current?.focus();
+    }, []);
+
+    useEffect(() => {
+    setSelectedIndex(-1);
+}, [search]);
 
     return (
         <div>
@@ -142,14 +181,19 @@ const POS = () => {
                     text="Orders History"
                     onClick={() => navigate('/orders-history')}
                 />
+                <Button
+                    text="Clear"
+                    onClick={() => clearItems()}
+                />
             </div>
 
-            <div className="pos-search" style={{ width: '100%', maxWidth: '1000px', margin: '20px auto' }}>
+            <div className="pos-search" style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
                 <SearchBar
-                    value={search}
+                    
+                    ref={searchRef}
                     onChange={(e) => setSearch(e.target.value)
-
                     }
+                    onKeyDown={handleKeyDown}
                 />
             </div>
 
@@ -158,10 +202,12 @@ const POS = () => {
                 <div className="search-results-wrapper" style={{
                     position: 'relative',
                     width: '100%',
-                    maxWidth: '600px',
+                    maxWidth: '450px',
                     backgroundColor: '#fff',
+                    fontSize:'16px',
+                    fontWeight:'500',
                     boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-                    borderRadius: '8px',
+                    borderRadius: '5px',
                     marginTop: '5px',
                     zIndex: 1000,
                     border: '1px solid #e5e7eb',
@@ -172,73 +218,25 @@ const POS = () => {
 
                     {filteredItems.length > 0 ? (
                         <div style={{ maxHeight: '350px', overflowY: 'auto' }}>
-                            <div style={{
-                                display: 'grid',
-                                gridTemplateColumns: '2fr 1fr 1fr 1fr',
-                                padding: '10px 15px',
-                                backgroundColor: '#f8f9fa',
-                                fontSize: '12px',
-                                fontWeight: 'bold',
-                                color: '#6b7280',
-                                borderBottom: '1px solid #eee'
-                            }}>
-                                <span>PRODUCT</span>
-                                <span style={{ textAlign: 'center' }}>STOCK</span>
-                                <span style={{ textAlign: 'center' }}>PRICE</span>
-                                <span style={{ textAlign: 'center' }}>ACTION</span>
-                            </div>
-
-                            {filteredItems.map((item) => (
-                                <div key={item.id} className="search-item-row" style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: '2fr 1fr 1fr 1fr',
-                                    padding: '12px 15px',
-                                    alignItems: 'center',
-                                    borderBottom: '1px solid #f3f4f6',
-                                    transition: 'background 0.2s',
-
-                                }}>
-                                    <div style={{ fontWeight: '600', fontSize: '14px', color: '#111827' }}>
-                                        {item.title}
-                                    </div>
-
-                                    <div style={{ textAlign: 'center' }}>
-                                        <span style={{
-                                            color: item.stock < 10 ? '#ef4444' : '#10b981',
-                                            fontWeight: 'bold',
-                                            fontSize: '13px',
-                                            backgroundColor: item.stock < 10 ? '#fee2e2' : '#dcfce7',
-                                            padding: '2px 8px',
-                                            borderRadius: '4px'
-                                        }}>
-                                            {item.stock}
-                                        </span>
-                                    </div>
-
-                                    <div style={{ textAlign: 'center', fontWeight: '700', color: '#374151' }}>
-                                        Rs {item.price}
-                                    </div>
-
-                                    <div style={{ textAlign: 'center' }}>
-                                        <button
-                                            onClick={() => handleAdd(item)}
-                                            style={{
-                        backgroundColor: "#eff6ff",
-                        color: "#3b82f6",
-                        border: "none",
-                        width:'70px',
-                        padding: "8px 12px",
-                        borderRadius: "8px",
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        cursor: "pointer"
-                      }}
-                                        >
-                                            Add
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
+                       
+                          {filteredItems.map((item, index) => (
+    <div 
+        key={item.id} 
+        className="search-item-row" 
+        style={{
+            display: 'grid',
+            gridTemplateColumns: '3fr 3fr',
+            padding: '12px 15px',
+            borderBottom: '1px solid #f3f4f6',
+            backgroundColor: index === selectedIndex ? '#dbeafe' : 'white', 
+            cursor: 'pointer'
+        }}
+    >
+        <div>{item.title}</div>
+        <div>Rs {item.price}</div>
+       
+    </div>
+))}
                         </div>
                     ) : (
                         <div style={{ padding: '20px', textAlign: 'center', color: '#94a3b8', fontSize: '14px' }}>
@@ -248,13 +246,22 @@ const POS = () => {
                 </div>
             )}
 
-
-
             <div style={{ marginTop: "30px", width: '80%', marginLeft: 'auto', marginRight: 'auto', padding: '10px', borderRadius: '8px' }}>
-                <h2 style={{ color: '#2c323b' }}>No of items Added ( {<span >
+                <h2 style={{ color: '#686d74' }}>No of items Added  {<span style={{
+        display: "inline-block",
+      
+        backgroundColor: "#3d72e3",
+        color: "#fff",
+        borderRadius: "12px",
+        padding: "2px 10px",
+        fontSize: "18px",
+        fontWeight: "600",
+        minWidth: "24px",
+        textAlign: "center",
+      }} >
                     {
                         userCart.reduce((sum, i) => sum + i.quantity, 0)
-                    } </span>})</h2>
+                    } </span>}</h2>
 
                 <div style={{ marginTop: '20px', width: '100%' }}>
                     <div style={{
@@ -411,7 +418,8 @@ const POS = () => {
                                 className='bill-summary'
                             >
                                 <span> Sub Total:</span>
-                                <span>Rs {totalItemsPrice.toFixed(2)}</span>
+                                <span>Rs {totalItemsPrice.toFixed(2)}</span> 
+                                
 
                             </p>
                             <p className='bill-summary'>
@@ -441,7 +449,7 @@ const POS = () => {
                             </p>
                             <p className='bill-summary'>
                                 Grand Total:
-                                <span style={{ float: 'right' }}>
+                                <span style={{ float: 'right',color:'#2563EB' }}> <span  style={{color:'#047857'}}>Rs </span>
                                     {
                                         finalBill.toFixed(2)
                                     }
@@ -501,7 +509,7 @@ const POS = () => {
                                 </p>
                                 <p className='bill-summary'>
                                     Grand Total:
-                                    <span style={{ float: 'right' }}>
+                                    <span style={{ float: 'right',color:'#2563EB' }}>
                                         0
 
                                     </span>

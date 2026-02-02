@@ -47,7 +47,7 @@ const SignUp = () => {
     return (
         <div className="sign-up-container">
             <form className='sign-up-form' onSubmit={handleSubmit}>
-                <h2 style={{ textAlign: 'center', color: '#606664' }}>Sign up</h2>
+                <h2 style={{ textAlign: 'center', color:'#1E40AF' }}>Sign up</h2>
                 <label>Name</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder='Enter your Name' className='login-input' />
 
@@ -63,8 +63,8 @@ const SignUp = () => {
                     </p>
                 )}
 
-                <button type="submit">SignUp</button>
-                <p>Already have an account? <Link to='/' style={{ color: 'blue', fontSize: '15px',color:'#64656b',fontWeight:'500',textDecoration:'none' }}>Login</Link></p>
+                <button type="submit" style={{backgroundColor:'#2563EB'}}>SignUp</button>
+                <p>Already have an account? <Link to='/' style={{ color: 'blue', fontSize: '15px',color:'#1E40AF',fontWeight:'500',textDecoration:'none' }}>Login</Link></p>
             </form>
             {success && !reduxError && <h2 style={{ color: 'green' }}>✅ Sign up Successfully!</h2>}
         </div>

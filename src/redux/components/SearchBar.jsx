@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SearchBar = ({value,onChange}) => {
+const SearchBar = ({value,onChange,ref,onKeyDown}) => {
     return (
      <div className="pos-search-wrapper">
     <input
@@ -9,6 +9,8 @@ const SearchBar = ({value,onChange}) => {
         className="pos-search-input"
         value={value}
         onChange={onChange}
+        ref={ref}
+        onKeyDown={onKeyDown}
     />
     <div className="search-icon-right">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

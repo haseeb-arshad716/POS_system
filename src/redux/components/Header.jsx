@@ -17,12 +17,12 @@ const Header = ({ currentUser, onLogout }) => {
                 <h1 style={{
                     fontSize: '25px',
                     fontWeight: '600',
-                    color: '#1e293b',
+                    color: ' #2563EB',
                     fontFamily: "'Inter', sans-serif",
                     margin: 0,
                     letterSpacing: '-0.5px'
                 }}>
-                    Nexus  <span style={{ color: '#72767d' }}>Retail</span>
+                    Nexus  <span style={{ color: '#22C55E ' }}>Retail</span>
                 </h1>
             </div>
 
@@ -32,21 +32,21 @@ const Header = ({ currentUser, onLogout }) => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '10px',
-                    backgroundColor: '#f8fafc',
+                    backgroundColor: '#60aaf3',
                     padding: '5px 12px',
                     borderRadius: '10px',
                     border: '1px solid #f1f5f9'
                 }}>
                     <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: '14px', fontWeight: '700', color: '#334155' }}>
+                        <div style={{ fontSize: '14px', fontWeight: '700', color: '#132f54' }}>
                             {currentUser?.name?.toUpperCase() || "GUEST"}
                         </div>
                     </div>
                     <div style={{
                         width: '32px',
                         height: '32px',
-                        backgroundColor: '#e2e8f0',
-                        color: '#475569',
+                        backgroundColor: '#17437d',
+                        color: '#abc1e1',
                         borderRadius: '50%',
                         display: 'flex',
                         alignItems: 'center',
@@ -85,7 +85,7 @@ const Header = ({ currentUser, onLogout }) => {
                         e.currentTarget.style.color = '#94a3b8';
                     }}
                 >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg style={{color:' #2563EB'}} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
                         <line x1="21" y1="12" x2="9" y2="12"></line>
