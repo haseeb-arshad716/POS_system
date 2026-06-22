@@ -64,7 +64,7 @@ const SignUp = () => {
                 )}
 
                 <button type="submit" style={{backgroundColor:'#2563EB'}}>SignUp</button>
-                <p>Already have an account? <Link to='/' style={{ color: 'blue', fontSize: '15px',color:'#1E40AF',fontWeight:'500',textDecoration:'none' }}>Login</Link></p>
+                <p>Already have an account? <Link to='/' style={{  fontSize: '15px',color:'#1E40AF',fontWeight:'500',textDecoration:'none' }}>Login</Link></p>
             </form>
             {success && !reduxError && <h2 style={{ color: 'green' }}>✅ Sign up Successfully!</h2>}
         </div>
