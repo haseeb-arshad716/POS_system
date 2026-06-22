@@ -12,7 +12,12 @@ import PageNotFound from "./redux/Pages/PageNotFound"
 import POS from "./redux/Pages/POS";
 import CheckOut from "./redux/Pages/CheckOut.jsx";
 import OrdersHistory from "./redux/Pages/OrdersHistory.jsx";
-
+import HomePage from "./redux/Pages/HomePage.jsx";
+import ProductDetail from "./redux/Pages/ProductDetail.jsx";
+import LoginDaraz from "./redux/Pages/LoginDaraz";
+import SignupDaraz from "./redux/Pages/SignupDaraz.jsx";
+import OpenOrders from "./redux/Pages/OpenOrders.jsx";
+import MyOrders from "./redux/Pages/MyOrders.jsx";
 const AppLayout = () => {
   const location = useLocation();
   const showHeader = location.pathname === "/Product";
@@ -25,6 +30,38 @@ const AppLayout = () => {
         <Route path="/signup" element={<SignUp />} />
 
         <Route path="*" element={<PageNotFound />} />
+
+        <Route path="/Homepage" element={
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        } />
+
+
+        <Route path="/product/:id" element={
+          <ProtectedRoute>
+            <ProductDetail />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/login-daraz" element={
+          <LoginDaraz />
+        } />
+
+        <Route path="/Signup-daraz" element={
+          <SignupDaraz />
+        } />
+        <Route path="/my-orders" element={
+          <MyOrders />
+        } />
+
+        <Route path="/open-orders" element={
+          <ProtectedRoute>
+            <OpenOrders />
+          </ProtectedRoute>
+
+        } />
+
 
         <Route path="/dashboard" element={
           <ProtectedRoute>
@@ -44,7 +81,7 @@ const AppLayout = () => {
           </ProtectedRoute>
         } />
 
-                <Route path="/orders-history" element={
+        <Route path="/orders-history" element={
           <ProtectedRoute>
             <OrdersHistory />
           </ProtectedRoute>

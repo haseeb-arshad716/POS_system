@@ -701,7 +701,7 @@ button[type='button']:hover {
             overflow: hidden;
 }
 .Place-order-btn{
-  background-color: #2563EB;
+  background-color: #4a7ce9;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -839,4 +839,87 @@ button[type='button']:hover {
   display: flex;
   justify-content: center;
   
+}
+.home-header{
+    background-color: #F85606;
+    color: white;
+    z-index: 1030;
+    height: auto;
+}
+
+.form-control {
+    border-radius: none;
+}
+.cart-icon{
+    width: 35px;
+}
+.price{
+    color: #f57224;
+    font-size: 18px;
+    font-weight: 500;
+}
+.seller{
+      font-size: 16px;
+    font-weight: 500;
+
+}
+.just{
+    font-size: 22px;
+}
+.card-title{
+    font-size: 14px;
+}
+.form-control :focus {
+    border-color: none;
+    background-color: none;
+}
+.product-title{
+        color: #212121;
+    font-size: 22px;
+    font-weight: 400;
+}
+.pd-btn{
+    font-size: 16px;
+}
+.qty{
+    color: grey;
+}
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px 25px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 360px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: scaleIn 0.3s ease-in-out;
+}
+
+.success-icon img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  display: none !important;
+}
+.just {
+    color: #424242;
+    font-size: 22px;
+}
+.dropdown-menu{
+    width: 250px !important;
+    border-radius: 0 !important;
+    
 }

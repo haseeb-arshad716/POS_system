@@ -49,7 +49,9 @@ const Dashboard = () => {
       description,
       price: Number(price),
       stock: Number(stock),
-      userId: currentUser.id
+      userId: currentUser.id,
+      seller:currentUser.name
+
     };
     dispatch(addItem(newItem));
 
@@ -81,17 +83,27 @@ const handleLogout = () => {
     setSelectedItemId(item.id);
   };
 
-  const handleConfirmUpdate = (e) => {
-    e.preventDefault();
+ const handleConfirmUpdate = (e) => {
+  e.preventDefault();
 
-    dispatch(addStock({
-      itemId: selectedItemId,
-      addedStock: Number(stock)
-    }));
+  const stockValue = Number(stock);
 
-    setstockModalOpen(false);
-    setStock("");
-  };
+  // validation
+  if (!stock || isNaN(stockValue) || stockValue <= 0) {
+    setError("Please enter a valid stock number");
+    return;
+  }
+
+  setError("");
+
+  dispatch(addStock({
+    itemId: selectedItemId,
+    addedStock: stockValue
+  }));
+
+setstockModalOpen(false);
+  setStock("");
+};
 
   return (
     <div className='dashboard-content'>
@@ -226,8 +238,8 @@ const handleLogout = () => {
 
 
       {modalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+        <div className="modal-overlay ">
+          <div className="modal-content bg-light rounded-4">
             <h1>Add item</h1>
             <form onSubmit={handleSubmit}>
               <label>Title</label>
@@ -268,7 +280,7 @@ const handleLogout = () => {
 
       {stockModalOpen && (
         <div className="modal-overlay">
-          <div className="modal-content">
+          <div className="modal-content bg-light rounded-4">
             <h1>Update Stock</h1>
 
             <form onSubmit={handleConfirmUpdate}>

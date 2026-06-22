@@ -16,7 +16,7 @@ const orderSlice = createSlice({
         discount,
         totalAmount,
         date: new Date().toLocaleString(),
-      };
+      };  
 
       state.history.push(newOrder);
       localStorage.setItem("orderHistory", JSON.stringify(state.history));

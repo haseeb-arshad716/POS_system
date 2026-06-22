@@ -11,23 +11,23 @@ const Login = () => {
   const navigate = useNavigate();
 
   const { users, error: reduxError } = useSelector((state) => state.users);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(clearError());
 
 
     const userFound = users.find(u => u.email === email && u.password === password);
+    console.log(email);
 
     if (userFound) {
       dispatch(loginuser({ email, password }));
-      navigate('/dashboard'); //
+      navigate('/dashboard');
     } else {
 
-      dispatch(loginuser({ email, password })); 
-      setTimeout(()=>{
+      dispatch(loginuser({ email, password }));
+      setTimeout(() => {
         dispatch(clearError());
-      },2500)
+      }, 2500)
     }
   };
 
@@ -37,22 +37,21 @@ const Login = () => {
 
       <form className="login-form" onSubmit={handleSubmit}>
         <div className="icon" >
-        <img src="https://tse4.mm.bing.net/th/id/OIP.l54ICAiwopa2RCt7J2URWwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="" className='login-icon'/>
-       </div>
-        <h2  style={{color:'#1E40AF'}}>User Login</h2>
+          <img src="https://tse4.mm.bing.net/th/id/OIP.l54ICAiwopa2RCt7J2URWwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="" className='login-icon' />
+        </div>
+        <h2 style={{ color: '#1E40AF' }}>User Login</h2>
         <label>Email</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className='login-input'/>
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className='login-input' />
 
         <label>Password</label>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className='login-input' />
 
         {reduxError && <p style={{ color: 'red', textAlign: 'center', fontWeight: 'bold' }}>{reduxError}</p>}
 
-        <button type="submit" style={{backgroundColor:'#2563EB'}}>Login</button>
-        <p>Don't have an account? <Link to="/signup" style={{ color: '#1E40AF', fontSize: '15px',textDecoration:'none',fontWeight:'500' }}>Sign up</Link></p>
+        <button type="submit" style={{ backgroundColor: '#2563EB' }}>Login</button>
+        <p>Don't have an account? <Link to="/signup" style={{ color: '#1E40AF', fontSize: '15px', textDecoration: 'none', fontWeight: '500' }}>Sign up</Link></p>
       </form>
     </div>
   )
 }
-
 export default Login;

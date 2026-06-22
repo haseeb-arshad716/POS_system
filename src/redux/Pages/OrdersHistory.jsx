@@ -6,9 +6,12 @@ const OrdersHistory = () => {
     const { history } = useSelector((state) => state.orders);
     const { currentUser } = useSelector((state) => state.users);
 
-    const myOrders = history.filter((order) =>
-        order.items.some((item) => item.userId === currentUser.id),
-    );
+    // const myOrders = history.filter((order) =>
+    //     order.items.some((item) => item.userId === currentUser.id),
+    // );
+    const myOrders = history?.filter((order) =>
+  order.items.some((item) => item.userId === currentUser.id)
+);
     const navigate = useNavigate();
     const goBack = () => {
         navigate("/POS");
@@ -70,7 +73,7 @@ const OrdersHistory = () => {
                     </div>
 
                     <div style={{ maxHeight: "700px", overflowY: "auto" }}>
-                        {myOrders.length > 0 ? (
+                        {myOrders?.length > 0 ? (
                             myOrders.map((order) => (
                                 <div
                                     key={order.orderId}

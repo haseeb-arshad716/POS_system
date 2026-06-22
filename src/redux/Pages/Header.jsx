@@ -13,12 +13,7 @@ const Header = () => {
             top:'0'}}>
       <li style={{listStyleType: 'none'}}><Link to = "/">Home</Link></li>
       <li style={{listStyleType: 'none'}}><Link to = "/">Products</Link></li>
-      <li style={{listStyleType: 'none'}}><Link to = "/dashboard">Dashboard</Link></li>
-  
-
-      
-      
-    
+      <li style={{listStyleType: 'none'}}><Link to = "/dashboard">Dashboard</Link></li> 
     </nav>
   </header>
 
