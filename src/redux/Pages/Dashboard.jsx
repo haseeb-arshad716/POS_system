@@ -104,6 +104,9 @@ const handleLogout = () => {
 setstockModalOpen(false);
   setStock("");
 };
+const gotohomepahe = ()=>{
+  navigate('/Homepage')
+}
 
   return (
     <div className='dashboard-content'>
@@ -111,6 +114,7 @@ setstockModalOpen(false);
       <Header currentUser={currentUser} onLogout={handleLogOut}/>
       <div className="btns" style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
         <Button onClick={() => setModalOpen(true)} text="Add Item" />
+          <button onClick={gotohomepahe}>Homepage</button>
 
         <Button text="POS" onClick={goToPos}  />
       </div>
